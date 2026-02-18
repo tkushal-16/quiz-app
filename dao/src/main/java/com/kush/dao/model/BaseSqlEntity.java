@@ -18,9 +18,7 @@ package com.kush.dao.model;
 import com.kush.dao.DaoUtil;
 import com.kush.data.BaseData;
 import com.kush.data.id.UUIDBased;
-import jakarta.persistence.Column;
-import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.*;
@@ -31,7 +29,8 @@ import java.util.function.Function;
 public abstract class BaseSqlEntity<D> implements BaseEntity<D> {
 
     @Id
-    @Column(name = ModelConstants.ID_PROPERTY, columnDefinition = "uuid")
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = ModelConstants.ID_PROPERTY, updatable = false, nullable = false)
     protected UUID id;
 
     @Column(name = ModelConstants.CREATED_TIME_PROPERTY, updatable = false)

@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication(scanBasePackages = "com.kush")
-@EntityScan(basePackages = "com.kush.dao")
-@EnableJpaRepositories(basePackages = "com.kush.dao.questions")
+@EntityScan(basePackages = "com.kush.dao.model.sql")
+@EnableJpaRepositories(basePackages = "com.kush.dao")
 public class QuizappApplication {
 
 	public static void main(String[] args) {
