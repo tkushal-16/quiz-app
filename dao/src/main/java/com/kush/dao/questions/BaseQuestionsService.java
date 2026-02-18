@@ -13,7 +13,7 @@ public class BaseQuestionsService implements QuestionsDaoService {
     private QuestionsRepository questionsRepository;
 
     @Override
-    public QuestionsDao saveAll(List<Questions> questions) {
-        return questionsRepository.saveAll(questionsDao.);
+    public List<Questions> saveAll(List<Questions> questions) {
+        return questionsDao.saveAll(questions);
     }
 }
