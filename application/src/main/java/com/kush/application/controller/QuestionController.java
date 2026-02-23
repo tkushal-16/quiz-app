@@ -1,13 +1,10 @@
 package com.kush.application.controller;
 
-import com.kush.application.service.QuestionsService;
-import com.kush.data.question.Questions;
-import lombok.RequiredArgsConstructor;
+import com.kush.common.question.Questions;
+import com.kush.common.questions.QuestionsService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -15,16 +12,23 @@ import java.util.List;
 @RequestMapping("/questions")
 public class QuestionController {
 
-    private final QuestionsService questionService;
-
-    public QuestionController(QuestionsService questionService) {
-        this.questionService = questionService;
-    }
+    @Autowired
+    private QuestionsService questionsService;
 
     @PostMapping("/bulk")
     public ResponseEntity<List<Questions>> saveBulkQuestions(@RequestBody List<Questions> questions) {
 
-        List<Questions> savedQuestions = questionService.saveAllQuestions(questions);
+        List<Questions> savedQuestions = questionsService.saveAll(questions);
         return ResponseEntity.ok(savedQuestions);
+    }
+
+    @PostMapping("/save")
+    public Questions saveOne(@RequestBody Questions questions) {
+        return questionsService.saveOne(questions);
+    }
+
+    @GetMapping("/get")
+    public List<Questions> getAllQuestions() {
+        return questionsService.findAll();
     }
 }

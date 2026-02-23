@@ -1,18 +1,22 @@
-package com.kush.data.question;
+package com.kush.common.question;
 
-import com.kush.data.BaseData;
-import com.kush.data.id.UUIDBased;
-import jakarta.persistence.Enumerated;
+
+import com.kush.common.BaseData;
+import com.kush.common.id.UUIDBased;
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.io.Serializable;
+import java.util.UUID;
+
 @EqualsAndHashCode(callSuper = true)
 @Data
 @AllArgsConstructor
 @Builder
-public class Questions extends BaseData<UUIDBased> {
+public class Questions extends BaseData<UUIDBased> implements Serializable {
 
     private String category;
 
@@ -34,12 +38,13 @@ public class Questions extends BaseData<UUIDBased> {
         super();
     }
 
-    public Questions(UUIDBased id){
+    public Questions(UUID id){
         super(id);
     }
 
     public Questions(Questions q){
-        super(q.getId());
+        super();
+        this.id = q.getId();
         this.createdTime = q.getCreatedTime();
         this.category = q.getCategory();
         this.difficultyLevel = q.getDifficultyLevel();
@@ -50,5 +55,4 @@ public class Questions extends BaseData<UUIDBased> {
         this.optionD = q.getOptionD();
         this.answer = q.getAnswer();
     }
-
 }

@@ -1,44 +1,48 @@
 package com.kush.dao.model.sql;
 
+import com.kush.common.id.UUIDBased;
+import com.kush.common.question.Options;
+import com.kush.common.question.QuestionLevel;
+import com.kush.common.question.Questions;
 import com.kush.dao.model.BaseSqlEntity;
-import com.kush.data.question.Options;
-import com.kush.data.question.QuestionLevel;
-import com.kush.data.question.Questions;
+import com.kush.dao.model.ModelConstants;
 import jakarta.persistence.*;
-import jdk.jfr.Enabled;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.util.UUID;
 
 @Entity
-@Table(name = "questions")
+@Table(name = ModelConstants.QUESTIONS_TABLE)
 @EqualsAndHashCode(callSuper = true)
+@Getter
+@Setter
 public class QuestionsEntity extends BaseSqlEntity<Questions> {
 
-    @Column(nullable = false, name = "category")
+    @Column(nullable = false, name = ModelConstants.QUESTIONS_CATEGORY_COLUMN)
     private String category;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, name = "difficultyLevel")
+    @Column(nullable = false, name = ModelConstants.QUESTIONS_DIFFICULTY_COLUMN)
     private QuestionLevel difficultyLevel;
 
-    @Column(nullable = false, name = "question")
+    @Column(nullable = false, name = ModelConstants.QUESTIONS_QUESTION_COLUMN)
     private String question;
 
-    @Column(nullable = false, name = "optionA")
+    @Column(nullable = false, name = ModelConstants.QUESTIONS_OPTIONA_COLUMN)
     private String optionA;
 
-    @Column(nullable = false, name = "optionB")
+    @Column(nullable = false, name = ModelConstants.QUESTIONS_OPTIONB_COLUMN)
     private String optionB;
 
-    @Column(nullable = false, name = "optionC")
+    @Column(nullable = false, name = ModelConstants.QUESTIONS_OPTIONC_COLUMN)
     private String optionC;
 
-    @Column(nullable = false, name = "optionD")
+    @Column(nullable = false, name = ModelConstants.QUESTIONS_OPTIOND_COLUMN)
     private String optionD;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, name = "answer")
+    @Column(nullable = false, name = ModelConstants.QUESTIONS_ANSWER_COLUMN)
     private Options answer;
 
     public QuestionsEntity() {
@@ -63,7 +67,7 @@ public class QuestionsEntity extends BaseSqlEntity<Questions> {
 
     @Override
     public Questions toData() {
-        Questions questions = new Questions();
+        Questions questions = new Questions(id);
         questions.setCreatedTime(createdTime);
         questions.setCategory(category);
         questions.setDifficultyLevel(difficultyLevel);

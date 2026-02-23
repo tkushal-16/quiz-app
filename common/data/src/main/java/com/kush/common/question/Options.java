@@ -1,4 +1,4 @@
-package com.kush.data.question;
+package com.kush.common.question;
 
 public enum Options {
     A,

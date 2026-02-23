@@ -12,7 +12,7 @@
     <packaging>jar</packaging>
 
     <name>application</name>
-    <url>http://maven.apache.org</url>
+    <url>https://maven.apache.org</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -22,11 +22,6 @@
         <dependency>
             <groupId>com.kush.dao</groupId>
             <artifactId>dao</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>com.kush.data</groupId>
-            <artifactId>data</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
@@ -47,6 +42,12 @@
             <artifactId>lombok</artifactId>
             <version>1.18.42</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.kush.common</groupId>
+            <artifactId>dao-api</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
 
     </dependencies>

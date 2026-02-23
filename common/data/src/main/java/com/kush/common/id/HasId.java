@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.kush.data.id;
+package com.kush.common.id;
 
-import java.util.UUID;
+import java.io.Serializable;
 
-public interface HasUUID {
+public interface HasId<I extends HasUUID> extends Serializable {
 
-    UUID getId();
+    I getId();
 
 }

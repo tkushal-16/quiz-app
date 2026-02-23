@@ -13,13 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.kush.data.id;
+package com.kush.common.id;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import lombok.Getter;
 
 import java.util.UUID;
 
+@Getter
 public abstract class IdBased<I extends UUIDBased> implements HasId<I> {
 	
 	protected I id;
@@ -38,11 +40,7 @@ public abstract class IdBased<I extends UUIDBased> implements HasId<I> {
 		this.id = id;
 	}
 
-	public I getId() {
-		return id;
-	}
-
-	@JsonIgnore
+    @JsonIgnore
 	public UUID getUuidId() {
 		if (id != null) {
 			return id.getId();

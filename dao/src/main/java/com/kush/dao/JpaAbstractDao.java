@@ -17,8 +17,11 @@ package com.kush.dao;
 
 import com.datastax.oss.driver.api.core.uuid.Uuids;
 import com.google.common.util.concurrent.ListenableFuture;
+import com.kush.common.HasVersion;
 import com.kush.dao.model.BaseEntity;
 import com.google.common.collect.Lists;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -36,6 +39,8 @@ public abstract class JpaAbstractDao<E extends BaseEntity<D>, D> implements Dao<
     @Autowired
     protected JdbcTemplate jdbcTemplate;
 
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Transactional
     @Override
@@ -74,6 +79,46 @@ public abstract class JpaAbstractDao<E extends BaseEntity<D>, D> implements Dao<
 
     protected E doSave(E entity, boolean isNew, boolean flush) {
         boolean flushed = false;
+        EntityManager entityManager = getEntityManager();
+        if (isNew) {
+            if (entity instanceof HasVersion versionedEntity) {
+                versionedEntity.setVersion(1L);
+            }
+            entityManager.persist(entity);
+        } else {
+            if (entity instanceof HasVersion versionedEntity) {
+                if (versionedEntity.getVersion() == null) {
+                    HasVersion existingEntity = entityManager.find(versionedEntity.getClass(), entity.getUuid());
+                    if (existingEntity != null) {
+                        /*
+                         * manually resetting the version to latest to allow force overwrite of the entity
+                         * */
+                        versionedEntity.setVersion(existingEntity.getVersion());
+                    } else {
+                        return doSave(entity, true, flush);
+                    }
+                }
+                versionedEntity = entityManager.merge(versionedEntity);
+                /*
+                 * by default, Hibernate doesn't issue an update query and thus version increment
+                 * if the entity was not modified. to bypass this and always increment the version, we do it manually
+                 * */
+                versionedEntity.setVersion(versionedEntity.getVersion() + 1);
+                /*
+                 * flushing and then removing the entity from the persistence context so that it is not affected
+                 * by next flushes (e.g. when a transaction is committed) to avoid double version increment
+                 * */
+                entityManager.flush();
+                entityManager.detach(versionedEntity);
+                flushed = true;
+                entity = (E) versionedEntity;
+            } else {
+                entity = entityManager.merge(entity);
+            }
+        }
+        if (flush && !flushed) {
+            entityManager.flush();
+        }
         return entity;
     }
 
@@ -85,29 +130,17 @@ public abstract class JpaAbstractDao<E extends BaseEntity<D>, D> implements Dao<
     }
 
     @Override
-    public D findById(UUID id, UUID key) {
-        log.debug("Get entity by key {}", key);
-        Optional<E> entity = getRepository().findById(key);
+    public D findById(UUID id) {
+        log.debug("Get entity by key {}",id);
+        Optional<E> entity = getRepository().findById(id);
         return DaoUtil.getData(entity);
     }
 
-//    @Override
-//    public ListenableFuture<D> findByIdAsync(UUID id, UUID key) {
-//        log.debug("Get entity by key async {}", key);
-//        return service.submit(() -> DaoUtil.getData(getRepository().findById(key)));
-//    }
-
     @Override
-    public boolean existsById(UUID id, UUID key) {
-        log.debug("Exists by key {}", key);
-        return getRepository().existsById(key);
+    public boolean existsById(UUID id) {
+        log.debug("Exists by id {}", id);
+        return getRepository().existsById(id);
     }
-
-//    @Override
-//    public ListenableFuture<Boolean> existsByIdAsync(UUID id, UUID key) {
-//        log.debug("Exists by key async {}", key);
-//        return service.submit(() -> getRepository().existsById(key));
-//    }
 
     @Transactional
     @Override
@@ -132,15 +165,9 @@ public abstract class JpaAbstractDao<E extends BaseEntity<D>, D> implements Dao<
         return DaoUtil.convertDataList(entities);
     }
 
-
-
-//    protected String getidColumn() {
-//        return ModelConstants.TENANT_ID_COLUMN;
-//    }
-
-//    protected EntityManager getEntityManager() {
-//        return entityManager;
-//    }
+    protected EntityManager getEntityManager() {
+        return entityManager;
+    }
 
     protected JdbcTemplate getJdbcTemplate() {
         return jdbcTemplate;

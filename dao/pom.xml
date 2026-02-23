@@ -19,12 +19,6 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>com.kush.data</groupId>
-            <artifactId>data</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-
         <!-- JPA -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -68,8 +62,8 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.kush.application</groupId>
-            <artifactId>application</artifactId>
+            <groupId>com.kush.common</groupId>
+            <artifactId>dao-api</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>

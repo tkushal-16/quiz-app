@@ -1,19 +1,32 @@
 package com.kush.dao.questions;
 
-import com.kush.application.service.QuestionsDaoService;
-import com.kush.data.question.Questions;
-import lombok.RequiredArgsConstructor;
+import com.kush.common.question.Questions;
+import com.kush.common.questions.QuestionsService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@RequiredArgsConstructor
-public class BaseQuestionsService implements QuestionsDaoService {
+@Service
+public class BaseQuestionsService implements QuestionsService {
 
+    @Autowired
     private QuestionsDao questionsDao;
-    private QuestionsRepository questionsRepository;
 
     @Override
     public List<Questions> saveAll(List<Questions> questions) {
         return questionsDao.saveAll(questions);
     }
+
+    @Override
+    public Questions saveOne(Questions questions) {
+        return questionsDao.save(questions.getUuidId(),questions);
+    }
+
+    @Override
+    public List<Questions> findAll() {
+        return questionsDao.findAllQuestions();
+    }
+
+
 }

@@ -17,6 +17,7 @@ package com.kush.dao;
 
 
 import com.google.common.util.concurrent.ListenableFuture;
+import com.kush.common.EntityType;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
@@ -25,56 +26,27 @@ import java.util.UUID;
 
 public interface Dao<T> {
 
-    @Transactional
-    T save(UUID id, T domain);
+    List<T> find(UUID id);
 
-    @Transactional
-    T saveAndFlush(UUID id, T domain);
+    T findById(UUID id);
 
-    T findById(UUID id, UUID key);
+    ListenableFuture<T> findByIdAsync(UUID id);
 
-    ListenableFuture<Boolean> existsByIdAsync(UUID id, UUID key);
+    boolean existsById(UUID id);
 
-    ListenableFuture<T> findByIdAsync(UUID id, UUID key);
+    ListenableFuture<Boolean> existsByIdAsync(UUID id);
 
-    boolean existsById(UUID id, UUID key);
+    T save(UUID id, T t);
 
-    @Transactional
+    T saveAndFlush(UUID id, T t);
+
     void removeById(UUID id);
 
-    @Transactional
     void removeAllByIds(Collection<UUID> ids);
 
-    List<T> find(UUID tenantId);
+    List<UUID> findIdsByUUIDAndIdOffset(UUID id, UUID idOffset, int limit);
 
-//    T findById(TenantId tenantId, UUID id);
-//
-//    ListenableFuture<T> findByIdAsync(TenantId tenantId, UUID id);
-//
-//    default List<EntityInfo> findEntityInfosByNamePrefix(TenantId tenantId, String name) {
-//        throw new UnsupportedOperationException();
-//    }
-//
-//    boolean existsById(TenantId tenantId, UUID id);
-//
-//    ListenableFuture<Boolean> existsByIdAsync(TenantId tenantId, UUID id);
-//
-//    T save(TenantId tenantId, T t);
-//
-//    T saveAndFlush(TenantId tenantId, T t);
-//
-//    void removeById(TenantId tenantId, UUID id);
-//
-//    void removeAllByIds(Collection<UUID> ids);
-//
-//    List<UUID> findIdsByTenantIdAndIdOffset(TenantId tenantId, UUID idOffset, int limit);
-//
-//    default List<? extends EntityFields> findNextBatch(UUID id, int batchSize) {
-//        throw new UnsupportedOperationException();
-//    }
-//
-//    default EntityType getEntityType() {
-//        return null;
-//    }
+    default EntityType getEntityType() { return null; }
+
 
 }

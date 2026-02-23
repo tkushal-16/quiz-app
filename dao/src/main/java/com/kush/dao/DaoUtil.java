@@ -1,7 +1,8 @@
 package com.kush.dao;
 
 import com.kush.dao.model.ToData;
-import com.kush.data.id.UUIDBased;
+import com.kush.common.id.UUIDBased;
+import com.kush.dao.model.sql.QuestionsEntity;
 import org.springframework.util.CollectionUtils;
 
 import java.util.*;
@@ -69,24 +70,6 @@ public final class DaoUtil {
         }
     }
 
-//    public static <T> void processInBatches(Function<PageLink, PageData<T>> finder, int batchSize, Consumer<T> processor) {
-//        processBatches(finder, batchSize, batch -> batch.getData().forEach(processor));
-//    }
-//
-//    public static <T> void processBatches(Function<PageLink, PageData<T>> finder, int batchSize, Consumer<PageData<T>> processor) {
-//        PageLink pageLink = new PageLink(batchSize);
-//        PageData<T> batch;
-//
-//        boolean hasNextBatch;
-//        do {
-//            batch = finder.apply(pageLink);
-//            processor.accept(batch);
-//
-//            hasNextBatch = batch.hasNext();
-//            pageLink = pageLink.nextPageLink();
-//        } while (hasNextBatch);
-//    }
-
     public static String getStringId(UUIDBased id) {
         if (id != null) {
             return id.toString();
@@ -94,5 +77,4 @@ public final class DaoUtil {
             return null;
         }
     }
-
 }
