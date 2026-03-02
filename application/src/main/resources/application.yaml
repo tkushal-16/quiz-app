@@ -1,7 +1,4 @@
 spring:
-  application:
-    name: quizapp
-
   datasource:
     url: jdbc:postgresql://localhost:5432/quiz_app
     username: postgres
@@ -9,7 +6,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
         format_sql: true
