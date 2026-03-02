@@ -1,7 +1,5 @@
 package com.kush.common;
 
-
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kush.common.id.IdBased;
 import com.kush.common.id.UUIDBased;
